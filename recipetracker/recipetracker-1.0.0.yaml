@@ -1,0 +1,148 @@
+openapi: 3.0.3
+info:
+  title: Recipe Tracker - OpenAPI 3.0
+  description: |-
+    This is a simple API for keeping track of recipes and their ingredients. 
+  version: 1.0.0
+tags:
+  - name: recipe
+    description: Everything about your Recipe
+paths:
+  /recipe:
+    post:
+      tags:
+        - recipe
+      summary: Create a new recipe.
+      description: Create a new recipe.
+      operationId: createRecipe
+      requestBody:
+        description: The new recipe to create.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recipe'
+        required: true
+      responses:
+        '201':
+          description: Successfully created recipe.
+        '400':
+          description: Bad Request 
+    put:
+      tags:
+        - recipe
+      summary: Update an existing recipe
+      description: Update an existing recipe by Id
+      operationId: updateRecipe
+      requestBody:
+        description: Update an existing recipe in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Recipe'
+        required: true
+      responses:
+        '200':
+          description: Successfully updated recipe.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+        '400':
+          description: Bad Request           
+        '404':
+          description: Recipe not found
+  /recipe/{id}:
+      get:
+        tags:
+          - recipe
+        summary: Get a recipe by Id.
+        description: Get a recipe by its Id.
+        operationId: getRecipeById
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: integer
+        responses: 
+          '200':
+            description: Successfully found recipe.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Recipe'
+          '404':
+            description: Recipe not found
+      delete:
+        tags:
+          - recipe
+        summary: Delete a recipe by Id.
+        description: Delete a recipe by its Id.
+        operationId: deleteRecipeById
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: integer
+        responses:
+          '202':
+            description: Successfully deleted recipe.
+components:
+  schemas:
+    Recipe:
+      description: A recipe
+      properties: 
+        id:
+          type: integer
+          description: reference id of the recipe
+        name:
+          type: string
+          description: The name of the Recipe.
+          example: Chicken Tikka Masala
+        dateCreated:
+          type: string
+          format: date-time
+          description: When the recipe was created.
+        source:
+          type: string
+          description: Where the recipe is from. A book, website etc.
+          example: From Crook to Crook
+        ingredients:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Ingredient'
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+      required:
+        - name
+    Label:
+      description: A category or descriptor for recipes.
+      properties:
+        name:
+          type: string
+          description: The name of the label.
+          example: Breakfast
+      required:
+        - name
+    Ingredient:
+      description: A part of a recipe.
+      properties:
+        name:
+          type: string
+          description: Name of the ingredient.
+          example: Milk
+        amount:
+          type: string
+          enum: [todo]
+      reqiured:
+        - name
+        - amount
+
+
+    
+    
+    
+    
