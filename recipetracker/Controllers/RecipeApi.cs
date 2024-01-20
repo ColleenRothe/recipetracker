@@ -11,16 +11,25 @@ using System.ComponentModel.DataAnnotations;
 using IO.Swagger.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using recipetracker.Services;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace IO.Swagger.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     [ApiController]
     public class RecipeApiController : ControllerBase
     {
+        private readonly ILogger<RecipeApiController> _logger;
+        private readonly IRecipeService _recipeService;
+
+        public RecipeApiController(ILogger<RecipeApiController> logger, IRecipeService recipeService)
+        {
+            _logger = logger;
+            _recipeService = recipeService;
+            
+        }
+
         /// <summary>
         /// Create a new recipe.
         /// </summary>
@@ -33,13 +42,14 @@ namespace IO.Swagger.Controllers
         [SwaggerOperation("CreateRecipe")]
         public virtual IActionResult CreateRecipe([FromBody] Recipe body)
         {
-            //TODO: Uncomment the next line to return response 201 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(201);
+
+            _recipeService.CreateRecipe(body);
+
+            return StatusCode(201);
 
             //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(400);
 
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -51,12 +61,10 @@ namespace IO.Swagger.Controllers
         [HttpDelete]
         [Route("/recipe/{id}")]
         [SwaggerOperation("DeleteRecipeById")]
-        public virtual IActionResult DeleteRecipeById([FromRoute][Required] int? id)
+        public virtual IActionResult DeleteRecipeById([FromRoute][Required] int id)
         {
-            //TODO: Uncomment the next line to return response 202 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(202);
-
-            throw new NotImplementedException();
+            _recipeService.DeleteRecipeById(id);
+            return StatusCode(202);
         }
 
         /// <summary>
@@ -70,20 +78,10 @@ namespace IO.Swagger.Controllers
         [Route("/recipe/{id}")]
         [SwaggerOperation("GetRecipeById")]
         [SwaggerResponse(statusCode: 200, type: typeof(Recipe), description: "Successfully found recipe.")]
-        public virtual IActionResult GetRecipeById([FromRoute][Required] int? id)
+        public virtual IActionResult GetRecipeById([FromRoute][Required] int id)
         {
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(Recipe));
 
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404);
-            string exampleJson = null;
-            exampleJson = "{\n  \"dateCreated\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"name\" : \"Chicken Tikka Masala\",\n  \"ingredients\" : [ {\n    \"amount\" : \"todo\",\n    \"name\" : \"Milk\"\n  }, {\n    \"amount\" : \"todo\",\n    \"name\" : \"Milk\"\n  } ],\n  \"id\" : 0,\n  \"source\" : \"From Crook to Crook\",\n  \"labels\" : [ {\n    \"name\" : \"Breakfast\"\n  }, {\n    \"name\" : \"Breakfast\"\n  } ]\n}";
-
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<Recipe>(exampleJson)
-            : default(Recipe);            //TODO: Change the data returned
-            return new ObjectResult(example);
+            return Ok(_recipeService.GetRecipeById(id));
         }
 
         /// <summary>
@@ -100,21 +98,7 @@ namespace IO.Swagger.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(Recipe), description: "Successfully updated recipe.")]
         public virtual IActionResult UpdateRecipe([FromBody] Recipe body)
         {
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(Recipe));
-
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400);
-
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404);
-            string exampleJson = null;
-            exampleJson = "{\n  \"dateCreated\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"name\" : \"Chicken Tikka Masala\",\n  \"ingredients\" : [ {\n    \"amount\" : \"todo\",\n    \"name\" : \"Milk\"\n  }, {\n    \"amount\" : \"todo\",\n    \"name\" : \"Milk\"\n  } ],\n  \"id\" : 0,\n  \"source\" : \"From Crook to Crook\",\n  \"labels\" : [ {\n    \"name\" : \"Breakfast\"\n  }, {\n    \"name\" : \"Breakfast\"\n  } ]\n}";
-
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<Recipe>(exampleJson)
-            : default(Recipe);            //TODO: Change the data returned
-            return new ObjectResult(example);
+            return Ok(_recipeService.UpdateRecipe(body));
         }
     }
 }
