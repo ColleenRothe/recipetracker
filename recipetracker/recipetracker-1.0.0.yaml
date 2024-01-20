@@ -100,6 +100,7 @@ components:
           type: string
           description: The name of the Recipe.
           example: Chicken Tikka Masala
+          nullable: true
         dateCreated:
           type: string
           format: date-time
@@ -108,12 +109,15 @@ components:
           type: string
           description: Where the recipe is from. A book, website etc.
           example: From Crook to Crook
+          nullable: true
         ingredients:
           type: array
+          nullable: true
           items: 
             $ref: '#/components/schemas/Ingredient'
         labels:
           type: array
+          nullable: true
           items:
             $ref: '#/components/schemas/Label'
       required:
@@ -125,6 +129,7 @@ components:
           type: string
           description: The name of the label.
           example: Breakfast
+          nullable: true
       required:
         - name
     Ingredient:
@@ -134,9 +139,11 @@ components:
           type: string
           description: Name of the ingredient.
           example: Milk
+          nullable: true
         amount:
           type: string
           enum: [todo]
+          nullable: true
       reqiured:
         - name
         - amount
